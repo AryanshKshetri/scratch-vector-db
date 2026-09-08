@@ -49,7 +49,7 @@ NumPy
 - [x] Text embedding pipeline
 - [x] Real 5,000-text corpus
 - [x] 50,000+ vector dataset
-- [ ] K-Means implementation
+- [x] K-Means implementation
 - [ ] IVF-Flat implementation
 - [ ] FastAPI vector endpoints
 - [ ] Benchmark suite
