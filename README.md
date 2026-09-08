@@ -47,8 +47,8 @@ NumPy
 - [x] Exact vector index
 - [x] Exact index tests
 - [x] Text embedding pipeline
-- [ ] Real 5,000-text corpus
-- [ ] 50,000+ vector dataset
+- [x] Real 5,000-text corpus
+- [x] 50,000+ vector dataset
 - [ ] K-Means implementation
 - [ ] IVF-Flat implementation
 - [ ] FastAPI vector endpoints
