@@ -3,3 +3,5 @@ uvicorn[standard]
 numpy
 sentence-transformers
 pydantic
+pytest
+nltk

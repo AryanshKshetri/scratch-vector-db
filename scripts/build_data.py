@@ -1,12 +1,10 @@
 from pathlib import Path
 
+import nltk
 import numpy as np
+from nltk.corpus import brown
 from sentence_transformers import SentenceTransformer
 
-
-# ---------------------------------------------------------
-# Configuration
-# ---------------------------------------------------------
 
 NUM_TEXTS = 5000
 MODEL_NAME = "all-MiniLM-L6-v2"
@@ -16,70 +14,77 @@ EMBEDDINGS_PATH = DATA_DIR / "embeddings.npy"
 TEXTS_PATH = DATA_DIR / "texts.txt"
 
 
-# ---------------------------------------------------------
-# Create a small real-text corpus
-# ---------------------------------------------------------
+def load_texts():
+    print("Loading Brown Corpus...")
 
-texts = [
-    "The dog is playing in the park.",
-    "A cat is sleeping on the sofa.",
-    "The weather is sunny and warm today.",
-    "Machine learning models learn patterns from data.",
-    "Python is widely used for artificial intelligence.",
-    "The football team won the championship.",
-    "The restaurant serves excellent Italian food.",
-    "A computer uses memory to store information.",
-    "The ocean contains millions of different species.",
-    "Scientists are studying climate change.",
-]
+    # Brown corpus is organized into sentences.
+    sentences = brown.sents()
 
+    texts = []
 
-# ---------------------------------------------------------
-# Repeat the seed corpus to reach 5,000 texts
-# ---------------------------------------------------------
+    for sentence in sentences:
+        text = " ".join(sentence)
 
-texts = [
-    texts[i % len(texts)] + f" Example number {i}."
-    for i in range(NUM_TEXTS)
-]
+        # Ignore extremely short fragments.
+        if len(text.split()) >= 8:
+            texts.append(text)
+
+        if len(texts) >= NUM_TEXTS:
+            break
+
+    print(f"Loaded {len(texts)} real text samples.")
+
+    return texts
 
 
-# ---------------------------------------------------------
-# Generate embeddings
-# ---------------------------------------------------------
+def create_embeddings(texts):
+    print("Loading embedding model...")
 
-print("Loading embedding model...")
+    model = SentenceTransformer(MODEL_NAME)
 
-model = SentenceTransformer(MODEL_NAME)
+    print(f"Generating embeddings for {len(texts)} texts...")
 
-print(f"Generating embeddings for {len(texts)} texts...")
+    embeddings = model.encode(
+        texts,
+        batch_size=32,
+        show_progress_bar=True,
+        convert_to_numpy=True,
+    )
 
-embeddings = model.encode(
-    texts,
-    batch_size=32,
-    show_progress_bar=True,
-    convert_to_numpy=True,
-)
-
-embeddings = embeddings.astype(np.float32)
+    return embeddings.astype(np.float32)
 
 
-# ---------------------------------------------------------
-# Save data
-# ---------------------------------------------------------
+def save_data(texts, embeddings):
+    DATA_DIR.mkdir(exist_ok=True)
 
-DATA_DIR.mkdir(exist_ok=True)
+    np.save(
+        EMBEDDINGS_PATH,
+        embeddings,
+    )
 
-np.save(EMBEDDINGS_PATH, embeddings)
+    with open(
+        TEXTS_PATH,
+        "w",
+        encoding="utf-8",
+    ) as file:
+        for text in texts:
+            file.write(text + "\n")
 
-with open(TEXTS_PATH, "w", encoding="utf-8") as file:
-    for text in texts:
-        file.write(text + "\n")
+
+def main():
+    texts = load_texts()
+
+    embeddings = create_embeddings(texts)
+
+    save_data(texts, embeddings)
+
+    print()
+    print("Dataset created successfully.")
+    print(f"Texts:      {len(texts)}")
+    print(f"Dimensions: {embeddings.shape[1]}")
+    print(f"Shape:      {embeddings.shape}")
+    print(f"Saved to:   {EMBEDDINGS_PATH}")
 
 
-print()
-print("Dataset created successfully.")
-print(f"Texts:      {len(texts)}")
-print(f"Dimensions: {embeddings.shape[1]}")
-print(f"Shape:      {embeddings.shape}")
-print(f"Saved to:   {EMBEDDINGS_PATH}")
+if __name__ == "__main__":
+    main()
