@@ -64,6 +64,10 @@ class SearchRequest(BaseModel):
     k: int = 10
     nprobe: int = 5
 
+class TextInsertRequest(BaseModel):
+    id: str
+    text: str
+
 
 class TextSearchRequest(BaseModel):
     text: str
@@ -306,6 +310,58 @@ def insert_exact(request: VectorRequest):
             detail=str(error),
         )
 
+
+@app.post("/vectors/ivf")
+def insert_ivf(request: VectorRequest):
+
+    try:
+        ivf_index.insert(
+            request.id,
+            np.asarray(
+                request.vector,
+                dtype=np.float32,
+            ),
+        )
+
+        return {
+            "message": "Vector inserted into IVF",
+            "id": request.id,
+        }
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=400,
+            detail=str(error),
+        )
+
+    except RuntimeError as error:
+        raise HTTPException(
+            status_code=400,
+            detail=str(error),
+        )
+
+
+# -------------------------------------------------
+# IVF delete
+# -------------------------------------------------
+
+@app.delete("/vectors/ivf/{vector_id}")
+def delete_ivf(vector_id: str):
+
+    deleted = ivf_index.delete(
+        vector_id
+    )
+
+    if not deleted:
+        raise HTTPException(
+            status_code=404,
+            detail="Vector not found",
+        )
+
+    return {
+        "message": "Vector deleted from IVF",
+        "id": vector_id,
+    }
 
 # -------------------------------------------------
 # Exact delete
