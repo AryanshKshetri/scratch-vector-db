@@ -50,7 +50,7 @@ NumPy
 - [x] Real 5,000-text corpus
 - [x] 50,000+ vector dataset
 - [x] K-Means implementation
-- [ ] IVF-Flat implementation
+- [x] IVF-Flat implementation
 - [ ] FastAPI vector endpoints
 - [ ] Benchmark suite
 - [ ] Recall@10 evaluation
