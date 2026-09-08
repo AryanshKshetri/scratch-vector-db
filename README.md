@@ -47,8 +47,8 @@ NumPy
 - [x] Exact vector index
 - [x] Exact index tests
 - [x] Text embedding pipeline
-- [ ] Real 5,000-text corpus
-- [ ] 50,000+ vector dataset
+- [x] Real 5,000-text corpus
+- [x] 50,000+ vector dataset
 - [ ] K-Means implementation
 - [ ] IVF-Flat implementation
 - [ ] FastAPI vector endpoints
@@ -287,3 +287,21 @@ Higher recall
        ↓
 Higher latency
 ```
+
+# Benchmark Dataset
+
+The initial corpus contains 5,000 real text samples.
+
+To satisfy the 50,000+ vector benchmark requirement, we derive
+additional vectors by applying small controlled perturbations to
+the real embeddings and renormalizing them.
+
+This produces a clustered vector space suitable for evaluating
+approximate nearest-neighbor search.
+
+The derived benchmark contains:
+
+- 50,000 vectors
+- 384 dimensions
+- float32 representation
+- deterministic generation using seed 42
