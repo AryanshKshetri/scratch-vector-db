@@ -305,3 +305,23 @@ The derived benchmark contains:
 - 384 dimensions
 - float32 representation
 - deterministic generation using seed 42
+
+## IVF-Flat Benchmark
+
+Dataset:
+
+- 50,000 vectors
+- Dimension: 384
+- Queries: 500
+- Top-k: 10
+- Clusters: 100
+
+| nprobe | Avg Latency |       P50 |       P95 | Recall@10 | Speedup |
+| -----: | ----------: | --------: | --------: | --------: | ------: |
+|      1 |    0.878 ms |  0.611 ms |  1.861 ms |    99.02% |  59.15x |
+|      5 |    5.458 ms |  5.343 ms |  7.740 ms |      100% |   9.52x |
+|     10 |   10.697 ms | 10.428 ms | 14.711 ms |      100% |   4.86x |
+|     25 |   24.084 ms | 23.500 ms | 31.355 ms |      100% |   2.16x |
+|    100 |   83.653 ms | 82.609 ms | 98.625 ms |      100% |   0.62x |
+
+The benchmark demonstrates the tradeoff between search cost and recall. With `nprobe=1`, IVF achieves 99.02% Recall@10 while searching only one of 100 clusters. Increasing `nprobe` to 5 achieves 100% Recall@10 while remaining substantially faster than the exact baseline.
