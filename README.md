@@ -38,24 +38,28 @@ Exact Index         IVF-Flat
 NumPy
 ```
 
-## Current Status
+## Project Checklist
 
-- [x] Project setup
-- [x] Python virtual environment
-- [x] FastAPI application
-- [x] Health endpoint
-- [x] Exact vector index
-- [x] Exact index tests
+- [x] Exact brute-force cosine similarity index
+- [x] 50,000 vectors indexed
+- [x] 384-dimensional embeddings
+- [x] Real text corpus with 5,000+ texts
 - [x] Text embedding pipeline
-- [x] Real 5,000-text corpus
-- [x] 50,000+ vector dataset
-- [x] K-Means implementation
-- [x] IVF-Flat implementation
-- [ ] FastAPI vector endpoints
-- [ ] Benchmark suite
-- [ ] Recall@10 evaluation
-- [ ] Interactive search demo
-- [ ] Final benchmark results
+- [x] K-Means clustering implemented from scratch
+- [x] IVF-Flat index implemented from scratch
+- [x] Configurable `nprobe`
+- [x] Top-k similarity search
+- [x] Insert operation
+- [x] Delete operation
+- [x] Exact vs IVF benchmark
+- [x] 500-query benchmark
+- [x] Recall@10 measurement
+- [x] Latency measurement (Average / P50 / P95 / P99)
+- [x] Speedup measurement
+- [x] FastAPI REST API
+- [x] Text-based semantic search API
+- [x] Interactive Swagger documentation
+- [ ] HNSW implementation
 
 ## Technology Stack
 
